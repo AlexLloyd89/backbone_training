@@ -1,14 +1,25 @@
-let Animal = Backbone.Model.extend({
-  walk: function() {
-    console.log(`Animal walking...`);
-  }
+let Song = Backbone.Model.extend();
+
+let Songs = Backbone.Collection.extend({
+  model: Song
 });
 
-let Dog = Animal.extend({
-  walk: function() {
-    Animal.prototype.walk.apply(this);
-    console.log(`dog walking...`);
-  }
+let songs = new Songs();
+
+songs.add(new Song({ title: "song1", genre: "jazz", downlaods: 3 }), { at: 0 });
+
+songs.push(new Song({ title: "song2", genre: "jazz", downlaods: 400 }));
+
+let jazzSongs = songs.where({ genre: "jazz" });
+
+let firstJazzSong = songs.findWhere({ genre: "jazz" });
+
+let topDownloads = songs.filter(function(song) {
+  return song.get("downlaods") > 100;
 });
-let dog = new Dog();
-dog.walk();
+
+console.log(topDownloads);
+
+songs.each(function(song) {
+  console.log(song);
+});
