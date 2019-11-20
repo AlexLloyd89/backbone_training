@@ -1,25 +1,16 @@
 let Song = Backbone.Model.extend();
 
-let Songs = Backbone.Collection.extend({
-  model: Song
+let SongView = Backbone.View.extend({
+  render: function() {
+    let template = _.template($("#songTemplate").html());
+    let html = template(this.model.toJSON());
+    this.$el.html(html);
+    return this;
+  }
 });
 
-let songs = new Songs();
+let song = new Song({ title: "song1", plays: 10000 });
 
-songs.add(new Song({ title: "song1", genre: "jazz", downlaods: 3 }), { at: 0 });
+let songView = new SongView({ el: "#container", model: song });
 
-songs.push(new Song({ title: "song2", genre: "jazz", downlaods: 400 }));
-
-let jazzSongs = songs.where({ genre: "jazz" });
-
-let firstJazzSong = songs.findWhere({ genre: "jazz" });
-
-let topDownloads = songs.filter(function(song) {
-  return song.get("downlaods") > 100;
-});
-
-console.log(topDownloads);
-
-songs.each(function(song) {
-  console.log(song);
-});
+songView.render();
